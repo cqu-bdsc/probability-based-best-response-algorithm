@@ -1,0 +1,3 @@
+    username = "root"
+    port = 3306
+    database = {name = "vehicleCD", schema = "main"}
