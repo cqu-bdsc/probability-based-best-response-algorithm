@@ -91,16 +91,22 @@ def get_vehicle_info(vehicle_ids, cursor):
     for v_id in vehicle_ids:
         information = sql_info(info_cursor=cursor, info_id=v_id)
         # First node could be any time
-        latitude = information[0]
-        longitude = information[1]
-        time = information[2]
-        print(latitude)
-        print()
-        data_frame = pd.DataFrame({'id': base_id, 'time': time, 'latitude': latitude, 'longitude': longitude})
+        latitudes = []
+        longitudes = []
+        times = []
+        for info in information:
+            latitude = info[0]
+            longitude = info[1]
+            time = info[2]
+            latitudes.append(latitude)
+            longitudes.append(longitude)
+            times.append(time)
+            print(base_id, time, latitude, longitude)
+        data_frame = pd.DataFrame({'id': base_id, 'time': times, 'latitude': latitudes, 'longitude': longitudes})
         if base_id == 0:
-            data_frame.to_csv("test.csv", )
+            data_frame.to_csv(settings.csv_name)
         else:
-            data_frame.to_csv("test.csv", mode='a', header=False)
+            data_frame.to_csv(settings.csv_name, mode='a', header=False)
         print("vehicleID" + str(base_id) + "complete")
         base_id += 1
 
