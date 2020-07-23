@@ -104,9 +104,9 @@ def get_vehicle_info(vehicle_ids, cursor):
             print(base_id, time, latitude, longitude)
         data_frame = pd.DataFrame({'id': base_id, 'time': times, 'latitude': latitudes, 'longitude': longitudes})
         if base_id == 0:
-            data_frame.to_csv(settings.csv_name)
+            data_frame.to_csv(settings.csv_name, index=False)
         else:
-            data_frame.to_csv(settings.csv_name, mode='a', header=False)
+            data_frame.to_csv(settings.csv_name, mode='a', index=False, header=False)
         print("vehicleID" + str(base_id) + "complete")
         base_id += 1
 
