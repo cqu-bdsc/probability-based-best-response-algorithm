@@ -1,7 +1,10 @@
 from config import settings
 import pymysql.cursors
 import pandas as pd
+import utm
 """
+x
+
 # time setup
     # 1 9AM
     # 2014/8/20 9:00 AM ----> 9:30 AM
@@ -28,6 +31,17 @@ import pandas as pd
 """
 
 
+def utm_get_relatively_coordinates(base_latitude, base_longitude, zone_length):
+    utm_coordinate = utm.from_latlon(base_latitude, base_longitude)
+    base_x = utm_coordinate[0]
+    base_y = utm_coordinate[1]
+    zone_number = utm_coordinate[2]
+    zone_letter = utm_coordinate[3]
+    relatively_x = base_x + zone_length
+    relatively_y = base_y + zone_length
+    return utm.to_latlon(relatively_x, relatively_y, zone_number, zone_letter)
+
+
 def create_tempe_sql():
     # 连接数据库
     connect = pymysql.Connect(
@@ -39,13 +53,23 @@ def create_tempe_sql():
         charset='utf8'
     )
 
+    # 根据坐标原点得到相对点的经纬度
+    relatively_coordinates = utm_get_relatively_coordinates(settings.base_latitude,
+                                                            settings.base_longitude,
+                                                            settings.zone_length)
+    relatively_latitude = relatively_coordinates[0]
+    relatively_longitude = relatively_coordinates[1]
+
+
     # 获取游标
     cursor = connect.cursor()
     print("connect DB success")
-    table_condition = "WHERE `timeStamp`>='2014-08-20 09:00:00' " \
-                      "AND `timeStamp`<='2014-08-20 09:05:00' " \
-                      "AND latitude>=30.646166 AND latitude<=30.676166" \
-                      "AND longitude>=104.045824 AND longitude<=104.075824"
+    table_condition = "WHERE `timeStamp`>='" + settings.start_time + "'" \
+                      "AND `timeStamp`<='" + settings.stop_time + "'" \
+                      "AND latitude>=" + str(settings.base_latitude) + \
+                      "AND latitude<=" + str(relatively_latitude) + \
+                      "AND longitude>=" + str(settings.base_longitude) + \
+                      "AND longitude<=" + str(relatively_longitude)
     sql_create_tem_table = "CREATE TEMPORARY TABLE tem_table SELECT * FROM VehicleGPS " + table_condition
     cursor.execute(sql_create_tem_table)
     print("create tem table success")

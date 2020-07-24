@@ -2,3 +2,10 @@
     port = 3306
     database = "vehicleCD"
     csv_name = "data.csv"
+
+    start_time = "2014-08-20 09:00:00"
+    stop_time = "2014-08-20 09:05:00"
+
+    zone_length = 3000
+    base_latitude = 30.646166
+    base_longitude = 104.045824

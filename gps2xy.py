@@ -26,6 +26,4 @@ print(longitude.head(3))
 
 for lat in latitude:
     for lon in longitude:
-        print(lat, lon)
-        print(float(lat), float(lon))
-        # print(utm.from_latlon(float(lat), lon))
+        print(utm.from_latlon(float(lat), float(lon)))
