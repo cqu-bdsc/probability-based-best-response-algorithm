@@ -12,15 +12,18 @@ import utm
 from config import settings
 
 
-def list_latlon_to_xy(list_latitude, list_longitude):
+def list_latlon_to_xy(list_latitude, list_longitude, base_latitude, base_longitude):
     list_x = []
     list_y = []
+    base_xy = utm.from_latlon(base_latitude, base_longitude)
+    base_x = base_xy[0]
+    base_y = base_xy[1]
     if len(list_latitude) == len(list_longitude):
         length = len(list_latitude)
         for i in range(length):
             xy_coordinate = utm.from_latlon(list_latitude[i], list_longitude[i])
-            list_x.append(float(xy_coordinate[0]))
-            list_y.append(float(xy_coordinate[1]))
+            list_x.append(float(xy_coordinate[0]) - float(base_x))
+            list_y.append(float(xy_coordinate[1]) - float(base_y))
             print(i)
     if len(list_x) == len(list_y):
         return list_x, list_y
@@ -35,7 +38,7 @@ def renew_csv():
     latitude = df['latitude']
     longitude = df['longitude']
     print("read csv success")
-    list_xy = list_latlon_to_xy(latitude, longitude)
+    list_xy = list_latlon_to_xy(latitude, longitude, settings.base_latitude, settings.base_longitude)
     if list_xy:
         list_x = list_xy[0]
         list_y = list_xy[1]
@@ -96,6 +99,5 @@ def fill_csv():
 
 
 if __name__ == '__main__':
-    # renew_csv()
+    renew_csv()
     fill_csv()
-    

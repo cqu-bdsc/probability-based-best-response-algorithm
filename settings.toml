@@ -3,7 +3,7 @@
     database = "vehicleCD"
     csv_name = "data.csv"
     xy_csv_name = "xy_data.csv"
-    fill_xy_csv_name = 'fill_xy.csv'
+    fill_xy_csv_name = "fill_xy.csv"
 
     start_time = "2014-08-20 09:00:00"
     stop_time = "2014-08-20 09:05:00"
