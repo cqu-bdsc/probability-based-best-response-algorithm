@@ -26,5 +26,6 @@
     task_request_SINR_max = 20
 
     channel_resource = 100
+    transmission_power = 40
 
 
