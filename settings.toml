@@ -5,6 +5,7 @@
     xy_csv_name = "./data/xy_data.csv"
     fill_xy_csv_name = "./data/fill_xy.csv"
     init_csv_name = "./data/init.csv"
+    task_csv_name = "./data/task.csv"
 
     start_time = "2014-08-20 09:00:00"
     stop_time = "2014-08-20 09:05:00"
@@ -21,7 +22,7 @@
     vehicle_task_number = 1
     task_request_rate_min = 10
     task_request_rate_max = 100
-    task_reuqest_SINR_min = 10
+    task_request_SINR_min = 10
     task_request_SINR_max = 20
 
     channel_resource = 100

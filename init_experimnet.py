@@ -2,6 +2,7 @@ from config import settings
 import math
 import numpy as np
 import pandas as pd
+import random
 
 
 def get_fog_node(zone_length, communication_range):
@@ -38,9 +39,9 @@ def get_tasks_in_time_slots(csv_file, time_slot, time_length, vehicle_task_numbe
     time = []
     fog_id = []
     v_number = []
+    fog_node = get_fog_node(settings.zone_length, settings.communication_range)
     for i in range(1, time_length, time_slot):
         df_second = df[df['time'] == i]
-        fog_node = get_fog_node(settings.zone_length, settings.communication_range)
         vehicle_number = get_vehicle_number_under_fog(fog_node,
                                      df_second,
                                      settings.communication_range)
@@ -50,6 +51,27 @@ def get_tasks_in_time_slots(csv_file, time_slot, time_length, vehicle_task_numbe
             v_number.append(number["vehicle_number"])
     init_df = pd.DataFrame({"time": time, "fog_id": fog_id, "vehicle_number": v_number})
     init_df.to_csv(settings.init_csv_name, index=False)
+    task_fog_id = []
+    task_time = []
+    required_rate = []
+    required_sinr = []
+    for j in range(1, len(fog_node) + 1):
+        init_df_id = init_df[init_df["fog_id"] == j]
+        time = init_df_id["time"].tolist()
+        num = init_df_id["vehicle_number"].tolist()
+        for k in range(len(time)):
+            now_time = time[k]
+            for l in range(num[k] * vehicle_task_number):
+                task_required_rate = random.randint(settings.task_request_rate_min,
+                                                    settings.task_request_rate_max)
+                task_required_sinr = random.randint(settings.task_request_SINR_min,
+                                                    settings.task_request_SINR_max)
+                task_fog_id.append(j)
+                task_time.append(now_time)
+                required_rate.append(task_required_rate)
+                required_sinr.append(task_required_sinr)
+    task_df = pd.DataFrame({"fog_id": task_fog_id, "time": task_time, "required_rate": required_rate, "required_sinr": required_sinr})
+    task_df.to_csv(settings.task_csv_name, index=False)
 
 
 if __name__ == '__main__':
