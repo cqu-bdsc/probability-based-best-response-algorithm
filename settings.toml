@@ -4,10 +4,26 @@
     csv_name = "./data/data.csv"
     xy_csv_name = "./data/xy_data.csv"
     fill_xy_csv_name = "./data/fill_xy.csv"
+    init_csv_name = "./data/init.csv"
 
     start_time = "2014-08-20 09:00:00"
     stop_time = "2014-08-20 09:05:00"
+    time_length = 300
 
     zone_length = 3000
     base_latitude = 30.646166
     base_longitude = 104.045824
+
+    fog_node_number = 9
+    communication_range = 500
+    time_slot = 10
+
+    vehicle_task_number = 1
+    task_request_rate_min = 10
+    task_request_rate_max = 100
+    task_reuqest_SINR_min = 10
+    task_request_SINR_max = 20
+
+    channel_resource = 100
+
+
