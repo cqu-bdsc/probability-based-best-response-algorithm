@@ -83,6 +83,7 @@ def get_tasks_in_time_slots(fog_node, csv_file, time_slot, time_length, vehicle_
     time = []
     fog_id = []
     v_number = []
+    vehicles_under_fog = []
     for i in range(1, time_length, time_slot):
         df_second = df[df['time'] == i]
         vehicle_number = get_vehicle_number_under_fog(fog_node,
@@ -92,36 +93,46 @@ def get_tasks_in_time_slots(fog_node, csv_file, time_slot, time_length, vehicle_
             time.append(i)
             fog_id.append(number["node_id"])
             v_number.append(number["vehicle_number"])
-    init_df = pd.DataFrame({"time": time, "fog_id": fog_id, "vehicle_number": v_number})
+            vehicles_under_fog.append(number["vehicle_under_fog"])
+    init_df = pd.DataFrame({"time": time, "fog_id": fog_id, "vehicle_number": v_number, "vehicles": vehicles_under_fog})
     init_df.to_csv(settings.init_csv_name, index=False)
     task_fog_id = []
     task_time = []
     required_rate = []
     required_sinr = []
+    task_x = []
+    task_y = []
     for j in range(1, len(fog_node) + 1):
         init_df_id = init_df[init_df["fog_id"] == j]
         time = init_df_id["time"].tolist()
         num = init_df_id["vehicle_number"].tolist()
+        vehicles = init_df_id["vehicles"]
         for k in range(len(time)):
             now_time = time[k]
-            for l in range(num[k] * vehicle_task_number):
-                task_required_rate = random.randint(settings.task_request_rate_min,
-                                                    settings.task_request_rate_max)
-                task_required_sinr = random.randint(settings.task_request_SINR_min,
-                                                    settings.task_request_SINR_max)
-                task_fog_id.append(j)
-                task_time.append(now_time)
-                required_rate.append(task_required_rate)
-                required_sinr.append(task_required_sinr)
+            now_vehicles = vehicles.tolist()[k]
+            for l in range(num[k]):
+                for n in range(vehicle_task_number):
+                    task_required_rate = random.randint(settings.task_request_rate_min,
+                                                        settings.task_request_rate_max)
+                    task_required_sinr = random.randint(settings.task_request_SINR_min,
+                                                        settings.task_request_SINR_max)
+                    task_fog_id.append(j)
+                    task_time.append(now_time)
+                    required_rate.append(task_required_rate)
+                    required_sinr.append(task_required_sinr)
+                    vehicle = now_vehicles[l]
+                    task_x.append(vehicle["x"])
+                    task_y.append(vehicle["y"])
     task_df = pd.DataFrame(
-        {"fog_id": task_fog_id, "time": task_time, "required_rate": required_rate, "required_sinr": required_sinr})
+        {"fog_id": task_fog_id, "time": task_time, "required_rate": required_rate, "required_sinr": required_sinr, "x": task_x, "y": task_y})
     task_df.to_csv(settings.task_csv_name, index=False)
 
 
 if __name__ == '__main__':
-    # for node in get_fog_node(settings.zone_length, settings.communication_range):
+    fog_node = get_fog_node(settings.zone_length, settings.communication_range)
     #     print(node)
-    get_tasks_in_time_slots(settings.fill_xy_csv_name,
+    get_tasks_in_time_slots(fog_node,
+                            settings.fill_xy_csv_name,
                             settings.time_slot,
                             settings.time_length,
                             settings.vehicle_task_number)
