@@ -1,7 +1,13 @@
+#!./venv python
+# -*- encoding: utf-8 -*-
 """
-author: neardws
-data: 16/7/2020
+@File    :   gps2xy.py    
+@Contact :   neard.ws@gmail.com
+@Github  :   neardws
 
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2020/7/29 下午4:08   neardws      1.0         None
 The objection is to obtain the converted UTM coordinates from WGS84 coordinates
 
 utm usage
@@ -64,7 +70,7 @@ def fill_csv():
     base_time = time[0]
     base_x = x[0]
     base_y = y[0]
-    
+
     for i in range(len(vehicle_id)):
         print(i)
         # add no.i point

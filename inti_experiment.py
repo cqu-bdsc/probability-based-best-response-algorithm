@@ -1,3 +1,15 @@
+#!./venv python
+# -*- encoding: utf-8 -*-
+"""
+@File    :   inti_experiment.py    
+@Contact :   neard.ws@gmail.com
+@Github  :   neardws
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2020/7/29 下午4:04   neardws      1.0         None
+"""
+
 from config import settings
 import math
 import numpy as np
@@ -27,24 +39,27 @@ def get_vehicle_number_under_fog(fog_node, data_frame, communication_range):
         node_y = node["y"]
         x = data_frame["x"].tolist()
         y = data_frame["y"].tolist()
+        vehicle_under_fog = []
         for i in range(len(x)):
             if np.sqrt(np.square(x[i] - node_x) + np.square(y[i] - node_y)) <= communication_range:
                 vehicle_number += 1
-        vehicle_number_under_fog.append({"node_id": node_id, "vehicle_number": vehicle_number})
+                vehicle_under_fog.append({"x": x[i], "y": y[i]})
+        vehicle_number_under_fog.append({"node_id": node_id,
+                                         "vehicle_number": vehicle_number,
+                                         "vehicle_under_fog": vehicle_under_fog})
     return vehicle_number_under_fog
 
 
-def get_tasks_in_time_slots(csv_file, time_slot, time_length, vehicle_task_number):
+def get_tasks_in_time_slots(fog_node, csv_file, time_slot, time_length, vehicle_task_number):
     df = pd.read_csv(csv_file)
     time = []
     fog_id = []
     v_number = []
-    fog_node = get_fog_node(settings.zone_length, settings.communication_range)
     for i in range(1, time_length, time_slot):
         df_second = df[df['time'] == i]
         vehicle_number = get_vehicle_number_under_fog(fog_node,
-                                     df_second,
-                                     settings.communication_range)
+                                                      df_second,
+                                                      settings.communication_range)
         for number in vehicle_number:
             time.append(i)
             fog_id.append(number["node_id"])
@@ -70,7 +85,8 @@ def get_tasks_in_time_slots(csv_file, time_slot, time_length, vehicle_task_numbe
                 task_time.append(now_time)
                 required_rate.append(task_required_rate)
                 required_sinr.append(task_required_sinr)
-    task_df = pd.DataFrame({"fog_id": task_fog_id, "time": task_time, "required_rate": required_rate, "required_sinr": required_sinr})
+    task_df = pd.DataFrame(
+        {"fog_id": task_fog_id, "time": task_time, "required_rate": required_rate, "required_sinr": required_sinr})
     task_df.to_csv(settings.task_csv_name, index=False)
 
 

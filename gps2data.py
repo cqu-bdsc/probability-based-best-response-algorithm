@@ -1,9 +1,13 @@
-from config import settings
-import pymysql.cursors
-import pandas as pd
-import utm
+#!./venv python
+# -*- encoding: utf-8 -*-
 """
-x
+@File    :   gps2data.py    
+@Contact :   neard.ws@gmail.com
+@Github  :   neardws
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2020/7/29 下午4:09   neardws      1.0         None
 
 # time setup
     # 1 9AM
@@ -28,7 +32,12 @@ x
     # 	AND latitude <= 30.676166
     # 	AND longitude >= 104.045824
     # 	AND longitude <= 104.075824
+
 """
+from config import settings
+import pymysql.cursors
+import pandas as pd
+import utm
 
 
 def utm_get_relatively_coordinates(base_latitude, base_longitude, zone_length):
@@ -61,7 +70,7 @@ def create_tempe_sql():
     relatively_longitude = relatively_coordinates[1]
 
 
-    # 获取游标
+    #  获取游标
     cursor = connect.cursor()
     print("connect DB success")
     table_condition = "WHERE `timeStamp`>='" + settings.start_time + "'" \
