@@ -15,6 +15,7 @@ import math
 import numpy as np
 import pandas as pd
 import random
+import matplotlib.pyplot as plot
 
 
 def get_fog_node(zone_length, communication_range):
@@ -128,11 +129,37 @@ def get_tasks_in_time_slots(fog_node, csv_file, time_slot, time_length, vehicle_
     task_df.to_csv(settings.task_csv_name, index=False)
 
 
+def draw_round(round_x, round_y, radius, width):
+    theta = np.arange(0, 2 * np.pi, 0.01)
+    x = round_x + radius * np.cos(theta)
+    y = round_y + radius * np.sin(theta)
+    plot.plot(x, y, color="gray", linestyle="--", linewidth=width)
+
+
+def draw_fog_task_in_the_map(fog_node, time, zone_length, communication_range):
+    plot.xlim(0, zone_length)
+    plot.ylim(0, zone_length)
+    for node in fog_node:
+        node_x = node["x"]
+        node_y = node["y"]
+        plot.plot(int(node_x), int(node_y), color="black", marker="^", markersize=10, label="fog node")
+        draw_round(node_x, node_y, communication_range, 1)
+    df = pd.read_csv(settings.task_csv_name)
+    df = df[df["time"] == time]
+    task_x = df["x"].tolist()
+    task_y = df["y"].tolist()
+    for i in range(len(task_x)):
+        plot.plot(int(task_x[i]), int(task_y[i]), color="darkred", marker="o", label="task", markersize=3)
+    plot.show()
+
+
 if __name__ == '__main__':
     fog_node = get_fog_node(settings.zone_length, settings.communication_range)
-    #     print(node)
-    get_tasks_in_time_slots(fog_node,
-                            settings.fill_xy_csv_name,
-                            settings.time_slot,
-                            settings.time_length,
-                            settings.vehicle_task_number)
+    # #     print(node)
+    # get_tasks_in_time_slots(fog_node,
+    #                         settings.fill_xy_csv_name,
+    #                         settings.time_slot,
+    #                         settings.time_length,
+    #                         settings.vehicle_task_number)
+
+    draw_fog_task_in_the_map(fog_node=fog_node, time=1, zone_length=settings.zone_length, communication_range=settings.communication_range)
