@@ -18,6 +18,15 @@ import random
 
 
 def get_fog_node(zone_length, communication_range):
+    """
+
+    Args:
+        zone_length:
+        communication_range:
+
+    Returns:
+
+    """
     number = math.floor(zone_length / (2 * communication_range))
     id = 0
     fog_node = []
@@ -31,6 +40,16 @@ def get_fog_node(zone_length, communication_range):
 
 
 def get_vehicle_number_under_fog(fog_node, data_frame, communication_range):
+    """
+
+    Args:
+        fog_node:
+        data_frame:
+        communication_range:
+
+    Returns:
+
+    """
     vehicle_number_under_fog = []
     for node in fog_node:
         vehicle_number = 0
@@ -51,6 +70,15 @@ def get_vehicle_number_under_fog(fog_node, data_frame, communication_range):
 
 
 def get_tasks_in_time_slots(fog_node, csv_file, time_slot, time_length, vehicle_task_number):
+    """
+
+    Args:
+        fog_node:
+        csv_file:
+        time_slot:
+        time_length:
+        vehicle_task_number:
+    """
     df = pd.read_csv(csv_file)
     time = []
     fog_id = []

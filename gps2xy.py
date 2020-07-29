@@ -19,6 +19,17 @@ from config import settings
 
 
 def list_latlon_to_xy(list_latitude, list_longitude, base_latitude, base_longitude):
+    """
+
+    Args:
+        list_latitude:
+        list_longitude:
+        base_latitude:
+        base_longitude:
+
+    Returns:
+
+    """
     list_x = []
     list_y = []
     base_xy = utm.from_latlon(base_latitude, base_longitude)
@@ -38,6 +49,9 @@ def list_latlon_to_xy(list_latitude, list_longitude, base_latitude, base_longitu
 
 
 def renew_csv():
+    """
+
+    """
     df = pd.read_csv(settings.csv_name)
     vehicle_id = df['id']
     time = df['time']
@@ -53,6 +67,9 @@ def renew_csv():
 
 
 def fill_csv():
+    """
+
+    """
     df = pd.read_csv(settings.xy_csv_name)
     vehicle_id = df['id']
     time = df['time']

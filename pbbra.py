@@ -36,6 +36,13 @@ import numpy as np
 
 
 def initialize(fog_node_id, time, channel_resource):
+    """
+
+    Args:
+        fog_node_id:
+        time:
+        channel_resource:
+    """
     probability = random.random()
     print(probability)
     task_df = pd.read_csv(settings.task_csv_name)

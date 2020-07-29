@@ -41,6 +41,16 @@ import utm
 
 
 def utm_get_relatively_coordinates(base_latitude, base_longitude, zone_length):
+    """
+
+    Args:
+        base_latitude:
+        base_longitude:
+        zone_length:
+
+    Returns:
+
+    """
     utm_coordinate = utm.from_latlon(base_latitude, base_longitude)
     base_x = utm_coordinate[0]
     base_y = utm_coordinate[1]
@@ -93,6 +103,14 @@ def sql_count(cursor):
 
 
 def get_vehicle_id(points):  # 根据车辆出现的轨迹点数量来筛选车辆ID
+    """
+
+    Args:
+        points:
+
+    Returns:
+
+    """
     vehicle_id = []
     sum = 0
     print("query time length success")
@@ -112,6 +130,15 @@ def get_vehicle_id(points):  # 根据车辆出现的轨迹点数量来筛选车�
 
 
 def sql_info(info_cursor, info_id):
+    """
+
+    Args:
+        info_cursor:
+        info_id:
+
+    Returns:
+
+    """
     sql_query_vehicle_info = "SELECT latitude, longitude, " \
                              "TIMESTAMPDIFF(SECOND, '2014-08-20 09:00:00', timeStamp) FROM tem_table " \
                              + "WHERE VehicleID = " + str(info_id) + " ORDER BY timeStamp ASC"
@@ -120,6 +147,12 @@ def sql_info(info_cursor, info_id):
 
 
 def get_vehicle_info(vehicle_ids, cursor):
+    """
+
+    Args:
+        vehicle_ids:
+        cursor:
+    """
     base_id = 0
     for v_id in vehicle_ids:
         information = sql_info(info_cursor=cursor, info_id=v_id)
